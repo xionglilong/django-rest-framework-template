@@ -4,18 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-# -----djangorestframework Dependence-----
 django = "~=4.0.6"
-djangorestframework = "~=3.13.1"
 mysqlclient = "~=2.1.1"
-pyyaml = "~=6.0"  # api document
-uritemplate = "4.1.1"  # api document
-markdown = "~=3.3.7"  #  browsable API page
-pygments = "2.12.0"  # markdown highlight
-django-filter = "~=22.1"  # filter function
-django-guardian = "~=2.4.0"  # object level permission
-drf-spectacular = "*"  # auto api document page
+
+# -----djangorestframework Dependence-----
+djangorestframework = "~=3.13.1"
+pyyaml = ">=6.0"  # api document
+uritemplate = ">=4.1.1"  # api document
+markdown = ">=3.3.7"  #  browsable API page
+pygments = ">=2.12.0"  # browsable API page, markdown highlight
+django-filter = ">=22.1"  # filter function
+django-guardian = ">=2.4.0"  # object level permission
+
 # -----djangorestframework other Dependence---
+drf-spectacular = ">=0.22.1"  # auto api document page
 
 [dev-packages]
 
