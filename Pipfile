@@ -4,19 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-# -----djangorestframework依赖-----
-django = "~4.0.6"
+# -----djangorestframework Dependence-----
+django = "~=4.0.6"
 djangorestframework = "~=3.13.1"
-mysqlclient = "~=2.1.1"  # mysql客户端支持
-pyyaml = "~=6.0"  # api文档功能依赖
-uritemplate = "4.1.1"  # api文档依赖
-markdown = "~=3.3.7"  # 可浏览API页面的依赖
-pygments = "2.12.0"  # markdown语法高亮
-django-filter = "~=22.1"  # 过滤器功能依赖
-django-guardian = "~=2.4.0"  # 对象级别的权限
-
-# -----djangorestframework其他依赖包---
-
+mysqlclient = "~=2.1.1"
+pyyaml = "~=6.0"  # api document
+uritemplate = "4.1.1"  # api document
+markdown = "~=3.3.7"  #  browsable API page
+pygments = "2.12.0"  # markdown highlight
+django-filter = "~=22.1"  # filter function
+django-guardian = "~=2.4.0"  # object level permission
+drf-spectacular = "*"  # auto api document page
+# -----djangorestframework other Dependence---
 
 [dev-packages]
 
