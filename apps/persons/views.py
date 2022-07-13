@@ -14,6 +14,7 @@ from persons.models import PersonModel
 from rest_framework import mixins
 from persons.serializers import PersonModel
 # from persons.permissions import IsOwnerOrReadOnly
+from rest_framework_extensions.cache.mixins import CacheResponseMixin  # 缓存
 
 
 class PersonListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):

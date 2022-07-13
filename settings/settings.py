@@ -7,6 +7,7 @@
 import os
 import sys
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,10 +33,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_filters',  # 添加过滤器包(django-filter)
     'drf_spectacular',  # 自动生成api文档
-    'users.apps.UsersConfig',
-    'persons.apps.PersonsConfig',
+    'users.apps.UsersConfig',  # app: 自定义用户登录注册
+    'persons.apps.PersonsConfig',  # app: 人员信息搜集
+    'articles.apps.ArticlesConfig',  # app: 新闻文章
 ]
 
 # rest_framework的全局配置
@@ -60,9 +63,25 @@ SPECTACULAR_SETTINGS = {
     # OTHER SETTINGS
 }
 
+# drf-extensions 缓存配置
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 2,  # 缓存时间为2秒
+}
+
+
+# djangorestframework-simplejwt 用户登录认证配置
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7)
+}
+
 
 # 自定义用户模型
-AUTH_USER_MODEL = "users.UserModel"
+AUTH_USER_MODEL = 'users.UserModel'
+
+# 自定义登录
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomAuthenticationBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -119,6 +138,19 @@ DATABASES = {
     }
 }
 # 注意新建mysql数据库，字符选择 utf-8 Unicode，排序选 utf8_general_ci
+"""
+
+# django-redis: Redis 配置 （django默认使用本地内存，重启后缓存内容失效）
+"""
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://password@127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 """
 
 # Password validation
