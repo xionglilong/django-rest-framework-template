@@ -12,20 +12,29 @@ def aliyun_send_sms(mobile, code):
     config.endpoint = f'dysmsapi.aliyuncs.com'
     client = Dysmsapi20170525Client(config)
 
-    send_sms_request = dysmsapi_20170525_models.SendSmsRequest(sign_name='阿里云短信测试', template_code='SMS_154950909',
+    send_sms_request = dysmsapi_20170525_models.SendSmsRequest(sign_name='XX', template_code='SMS_XXXXXXXX',
                                                                phone_numbers=mobile,
                                                                template_param='{"code":"%s"}' % code)
     runtime = util_models.RuntimeOptions()
     try:
         # 复制代码运行请自行打印 API 的返回值
         result = client.send_sms_with_options(send_sms_request, runtime)
-        print(result)
+
+        code = result.body.code
+        message = result.body.message
+        if code == 'OK':
+            code = True
+        else:
+            code = False
+
+        return {'code': code, 'message': message}
+
     except Exception as error:
+        print(error)
         # 如有需要，请打印 error
         UtilClient.assert_as_string(error.message)
-        print(error)
 
 
 if __name__ == '__main__':
     # Sample.main(sys.argv[1:])
-    aliyun_send_sms('15800000000', '1234')
+    aliyun_send_sms('1580273418', '1234')

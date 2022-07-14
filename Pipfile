@@ -15,7 +15,7 @@ pygments = ">=2.12.0"  # browsable API page, markdown highlight
 django-filter = ">=22.1"  # filter function
 django-guardian = ">=2.4.0"  # object level permission
 # -----djangorestframework other Dependence---
-djangorestframework-simplejwt = ">=5.1.0"  #JSON Web Token authentication: https://github.com/jazzband/djangorestframework-simplejwt
+djangorestframework-simplejwt = ">=5.1.0"  # JSON Web Token authentication: https://github.com/jazzband/djangorestframework-simplejwt
 drf-spectacular = ">=0.22.1"  # auto api document page: https://github.com/tfranzel/drf-spectacular
 drf-extensions = ">=0.7.1"  # drf caching: https://github.com/chibisov/drf-extensions
 django-redis = ">=5.2.0"  # django redis: https://github.com/jazzband/django-redis

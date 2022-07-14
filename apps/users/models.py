@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -16,7 +17,7 @@ class UserModel(AbstractUser):
     birthday = models.DateField("生日", null=True, blank=True, help_text="生日")
     sex = models.BooleanField('性别', choices=SEX_CHOICES, default=1, help_text="性别")
     address = models.CharField("住址", max_length=100, default="", help_text="住址")
-    mobile = models.CharField("手机号", max_length=11, null=True, blank=True, help_text="手机号")
+    mobile = models.CharField("手机号", max_length=11, help_text="请输入11位的手机号")
     icon = models.ImageField("头像路径", upload_to="head/%Y/%m", default="head/default.png", max_length=100, help_text="头像路径")
 
     class Meta:
@@ -26,3 +27,10 @@ class UserModel(AbstractUser):
 
     def __str__(self):
         return self.nick_name
+
+
+# 短信验证码表
+class SmsCodeModel(models.Model):
+    mobile = models.CharField('手机号', max_length=11)
+    code = models.CharField('验证码', max_length=4)
+    create_time = models.DateTimeField('创建时间', auto_now_add=True)

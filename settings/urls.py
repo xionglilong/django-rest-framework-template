@@ -19,10 +19,15 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from persons.views import PersonListViewSet
+from users.views import SmsCodeViewSet, UserViewSet
+from articles.views import ArticleViewSet
 
 
 router = DefaultRouter()
-router.register(r'persons', PersonListViewSet, basename='persons')
+router.register(r'persons', PersonListViewSet, basename='persons')  # 人员信息收集
+router.register(r'codes', SmsCodeViewSet, basename='codes')  # 短信验证码
+router.register(r'users', UserViewSet, basename='users')  # 用户注册、查询个人信息
+router.register(r'articles', ArticleViewSet, basename='articles')   # 文章
 
 urlpatterns = [
     re_path(r'^', include(router.urls)),
@@ -36,7 +41,7 @@ urlpatterns = [
 
     # 自动生成api文档（drf-spectacular）
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('doc/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # swagger接口文档
+    path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # swagger接口文档
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),  # redoc接口文档
 
 

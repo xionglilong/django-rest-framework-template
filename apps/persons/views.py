@@ -8,7 +8,6 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from users.serializers import UserSerializer
 from .serializers import PersonSerializer
 from persons.models import PersonModel
 from rest_framework import mixins
