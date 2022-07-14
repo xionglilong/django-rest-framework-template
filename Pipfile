@@ -20,6 +20,7 @@ drf-spectacular = ">=0.22.1"  # auto api document page: https://github.com/tfran
 drf-extensions = ">=0.7.1"  # drf caching: https://github.com/chibisov/drf-extensions
 django-redis = ">=5.2.0"  # django redis: https://github.com/jazzband/django-redis
 alibabacloud-dysmsapi20170525 = ">=2.0.15"  # aliyun send sms: https://next.api.aliyun.com/document/Dysmsapi/2017-05-25/SendSms
+pillow = ">=9.2.0"  # models.ImageField dependence
 
 [dev-packages]
 

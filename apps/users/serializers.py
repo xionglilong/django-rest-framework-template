@@ -13,6 +13,7 @@ UserModel = get_user_model()
 
 # 用户注册序列化器
 class UserRegisterSerializer(serializers.ModelSerializer):
+    """用户注册序列化器"""
     # person在用户模型中是反向关联关系，不会默认包含，需要手动添加显式字段
     # persons = serializers.PrimaryKeyRelatedField(many=True, queryset=PersonModel.objects.all())  # 本身没有这个字段，关联自己的外键的表
     username = serializers.CharField(required=False, allow_blank=True, allow_null=True, validators=[UniqueValidator(queryset=UserModel.objects.all(), message="用户已经存在")], label="用户名", help_text="请输入用户名")
@@ -62,6 +63,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 # 短信序列号器
 class SmsSerializer(serializers.Serializer):  # 这里用不了模型序列化器，因为code为必填字段没法及时填写
+    """短信序列化器"""
     mobile = serializers.CharField(max_length=11)
 
     # 验证手机号

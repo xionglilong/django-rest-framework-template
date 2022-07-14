@@ -11,13 +11,12 @@ from .serializers import SmsSerializer, UserRegisterSerializer
 from .models import SmsCodeModel
 from .utils.send_sms import aliyun_send_sms  # 发送验证码函数
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
 UserModel = get_user_model()
 
 
 class CustomAuthenticationBackend(ModelBackend):
-    """
-    自定义用户验证: 通过用户名或手机号登录
-    """
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = UserModel.objects.get(Q(username=username) | Q(mobile=username))
@@ -29,12 +28,14 @@ class CustomAuthenticationBackend(ModelBackend):
 
 class SmsCodeViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
     """
-    发送短信验证码
+    ## 发送短信验证码
     """
 
     serializer_class = SmsSerializer
 
+    # @extend_schema( description="", )
     def create(self, request, *args, **kwargs):
+        """## 发送验证码"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)  # 如果数据验证没通过直接抛出异常，会被drf捕获返回400响应，不执行后面语句
         code = str(random.randint(1000, 9999))
@@ -51,12 +52,13 @@ class SmsCodeViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
 class UserViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
     """
-    用户
+    ## 用户注册
     """
     serializer_class = UserRegisterSerializer
     queryset = UserModel.objects.all()
 
     def create(self, request, *args, **kwargs):
+        """## 创建一个新用户"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = self.perform_create(serializer)

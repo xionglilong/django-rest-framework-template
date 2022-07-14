@@ -1,7 +1,12 @@
 """settings URL Configuration
+rdf官方教程:
+    https://www.django-rest-framework.org/tutorial/6-viewsets-and-routers/
+rdf API指南:
+    https://www.django-rest-framework.org/api-guide/routers/
+django中文文档:
+    https://docs.djangoproject.com/zh-hans/4.0/topics/http/urls/
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
+
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -24,13 +29,14 @@ from articles.views import ArticleViewSet
 
 
 router = DefaultRouter()
+# 自动绑定ViewSet的方法，自动配置路由
 router.register(r'persons', PersonListViewSet, basename='persons')  # 人员信息收集
 router.register(r'codes', SmsCodeViewSet, basename='codes')  # 短信验证码
 router.register(r'users', UserViewSet, basename='users')  # 用户注册、查询个人信息
 router.register(r'articles', ArticleViewSet, basename='articles')   # 文章
 
 urlpatterns = [
-    re_path(r'^', include(router.urls)),
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),  # 调试api的认证接口，可浏览的API的登录和注销视图，配置了才会在可浏览api界面出现登录按钮
 

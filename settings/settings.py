@@ -57,9 +57,10 @@ REST_FRAMEWORK = {
 
 # drf-spectacular api文档配置: https://github.com/tfranzel/drf-spectacular
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'API接口文档',
+    'TITLE': '项目API接口文档',
     'DESCRIPTION': '项目详情介绍',
     'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
 
@@ -71,7 +72,8 @@ REST_FRAMEWORK_EXTENSIONS = {
 
 # djangorestframework-simplejwt 用户登录认证配置
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=7)
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),  # token过期时间
+    'AUTH_HEADER_TYPES': ('Bearer', 'token'),  # header头部的内容开头标记
 }
 
 

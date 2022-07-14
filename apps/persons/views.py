@@ -14,11 +14,15 @@ from rest_framework import mixins
 from persons.serializers import PersonModel
 # from persons.permissions import IsOwnerOrReadOnly
 from rest_framework_extensions.cache.mixins import CacheResponseMixin  # 缓存
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
+@extend_schema_view(
+    list=extend_schema(description='列出人员信息列表'),
+)
 class PersonListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     """
-    描述
+    ## 人员列表
     """
     queryset = PersonModel.objects.all()  # 这里并没有真的取数据，只是生成一个sql语句
     serializer_class = PersonSerializer
