@@ -20,7 +20,7 @@ class ArticleTagModel(models.Model):
         verbose_name = "文章标签表"
         verbose_name_plural = verbose_name
         ordering = ('create_time', )
-        unique_together = ("name", "owner")  # 联合唯一约束
+        unique_together = ("owner", "name")  # 联合唯一约束
 
     def __str__(self):  # 在后台admin列表中显示的字段
         return self.name  # 这里填入的字段的数据内容不要为空

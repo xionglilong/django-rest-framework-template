@@ -47,10 +47,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # 修改默认的分页类型，使用每页数量和页面编号来分页
     'PAGE_SIZE': 20,  # 每个页面的数量，配置完后立马有分页功能，并且json数据格式会调整，还会多出几个字段：count、next、previous，文件路径字段还会添加完整域名
 
-    'DEFAULT_AUTHENTICATION_CLASSES': (  # 类似于中间件，按顺序执行authenticate()，主要是通过不同的认证方式来查找用户并设置request.user
+    'DEFAULT_AUTHENTICATION_CLASSES': (  # 允许的认证方式(全局开启)。类似于中间件，按顺序执行authenticate()，主要是通过不同的认证方式来查找用户并设置request.user
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',  # 依赖django的SessionMiddleware、AuthenticationMiddleware，一般浏览器常见，前后端分离一般不用，不过内置文档功能要用
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication', # 这里是全局做 jwt接收到request.user的转换，有些api是不需要登录的，所以一般也不在这配，仅作演示
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # 这个不建议全局配置，建议在ViewSet单独配置，因为如果传过来的token过期了会报错，可能导致公共数据查询失败
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # drf-spectacular api文档配置
 }

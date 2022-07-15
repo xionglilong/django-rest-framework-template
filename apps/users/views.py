@@ -1,5 +1,5 @@
-from django.shortcuts import render
 import random
+import re
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -9,9 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import SmsSerializer, UserRegisterSerializer
 from .models import SmsCodeModel
-from .utils.send_sms import aliyun_send_sms  # 发送验证码函数
+from utils.send_sms import AliyunSendSMS  # 发送验证码函数
 from rest_framework_simplejwt.tokens import RefreshToken
-from drf_spectacular.utils import extend_schema, extend_schema_view
 
 UserModel = get_user_model()
 
@@ -20,7 +19,11 @@ class CustomAuthenticationBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = UserModel.objects.get(Q(username=username) | Q(mobile=username))
-            if user.check_password(password):
+            # 密码登录验证
+            if password and user.check_password(password):
+                return user
+            # 短信登录验证
+            if re.match(r"^\d{6}$", password) and re.match(r"^1[358]\d{9}$|^147\d{8}$|^176\d{8}$", username) and AliyunSendSMS().validate_code(password)['success']:
                 return user
         except Exception as e:
             return None
@@ -38,16 +41,14 @@ class SmsCodeViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
         """## 发送验证码"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)  # 如果数据验证没通过直接抛出异常，会被drf捕获返回400响应，不执行后面语句
-        code = str(random.randint(1000, 9999))
+
         mobile = serializer.validated_data["mobile"]
         # 发送验证码
-        send_result = aliyun_send_sms(mobile, code)
-        if send_result['code']:  # 如果发送成功
-            sms_code = SmsCodeModel(code=code, mobile=mobile)
-            sms_code.save()
+        result = AliyunSendSMS().send_code(mobile)
+        if result['success']:
             return Response({"mobile": mobile}, status=status.HTTP_201_CREATED)
         else:  # 如果发送失败
-            return Response({"mobile": send_result["message"]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"mobile": result["message"]}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):

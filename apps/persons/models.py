@@ -55,7 +55,7 @@ class FamilyModel(models.Model):
 
     # 外键,数据库键名:person_id,关联到了Person表id键
     # 可以通过关联名related_name反向查询子表的数据，当然也可以通过"小写的子表名_set"的形式代替
-    person = models.ForeignKey(PersonModel, on_delete=models.CASCADE, related_name='personFamily', help_text="所属人")
+    person = models.ForeignKey(PersonModel, on_delete=models.CASCADE, related_name='families', help_text="所属人")
 
     def __str__(self):
         return self.relation

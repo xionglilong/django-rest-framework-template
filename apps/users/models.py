@@ -12,6 +12,7 @@ SEX_CHOICES = [(1, '男'), (0, '女')]
 
 
 # 扩展内置的user表（内置字段有：first_name,last_name,username,password,email,is_superuser,is_active,is_joined,date_joined,last_login）
+# 注意：关联了信号量，请查看signals.py文件
 class UserModel(AbstractUser):
     nick_name = models.CharField(verbose_name="昵称", max_length=50, default="", help_text="昵称")
     birthday = models.DateField("生日", null=True, blank=True, help_text="生日")
@@ -33,4 +34,5 @@ class UserModel(AbstractUser):
 class SmsCodeModel(models.Model):
     mobile = models.CharField('手机号', max_length=11)
     code = models.CharField('验证码', max_length=4)
+    used = models.BooleanField('是否被使用', default=0)
     create_time = models.DateTimeField('创建时间', auto_now_add=True)

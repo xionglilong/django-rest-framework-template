@@ -15,3 +15,10 @@
 mkdir .venv
 pipenv install
 ```
+
+## 依赖安装
+```shell
+# 在Linux系统中，oss2包需要python-devel依赖，不然会导致上传下载效率非常低
+apt-get install python-dev
+
+```
