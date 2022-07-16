@@ -24,6 +24,7 @@ pillow = ">=9.2.0"  # models.ImageField dependence
 alibabacloud-dysmsapi20170525 = ">=2.0.15"  # aliyun send sms: https://next.api.aliyun.com/document/Dysmsapi/2017-05-25/SendSms
 oss2 = '>=2.15.0'  # aliyun oss api: https://help.aliyun.com/document_detail/32026.html
 crcmod = ">=1.7"  # aliyun oss api dependence: test: import crcmod._crcfunext
+alipay-sdk-python = ">=3.6.227"  # aliyun pay sdk: https://opendocs.alipay.com/common/02np8q
 
 [dev-packages]
 

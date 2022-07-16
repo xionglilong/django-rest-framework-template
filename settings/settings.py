@@ -48,7 +48,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,  # 每个页面的数量，配置完后立马有分页功能，并且json数据格式会调整，还会多出几个字段：count、next、previous，文件路径字段还会添加完整域名
 
     'DEFAULT_AUTHENTICATION_CLASSES': (  # 允许的认证方式(全局开启)。类似于中间件，按顺序执行authenticate()，主要是通过不同的认证方式来查找用户并设置request.user
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',  # 浏览器弹框认证
         'rest_framework.authentication.SessionAuthentication',  # 依赖django的SessionMiddleware、AuthenticationMiddleware，一般浏览器常见，前后端分离一般不用，不过内置文档功能要用
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # 这个不建议全局配置，建议在ViewSet单独配置，因为如果传过来的token过期了会报错，可能导致公共数据查询失败
     ),
@@ -189,6 +189,9 @@ USE_TZ = False  # 数据库中使用本地时间
 
 STATIC_URL = 'static/'
 
+# 媒体资源路径（drf会自动修改媒体文件url路径）
+MEDIA_URL = '/media/'  # 路径形式
+# MEDIA_URL = 'https://www.example.com/media/'  # 链接形式
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

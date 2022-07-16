@@ -19,13 +19,20 @@ from utils.send_sms import AliyunSendSMS
 UserModel = get_user_model()
 
 
+# 用户详情的数据序列化器
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ('username', 'nick_name', 'icon', 'birthday', 'mobile')
+
+
 # 用户注册数据序列化器
 class UserRegisterSerializer(serializers.ModelSerializer):
     """用户注册序列化器"""
     # person在用户模型中是反向关联关系，不会默认包含，需要手动添加显式字段
     # persons = serializers.PrimaryKeyRelatedField(many=True, queryset=PersonModel.objects.all())  # 本身没有这个字段，关联自己的外键的表
     username = serializers.CharField(required=False, allow_blank=True, allow_null=True, validators=[UniqueValidator(queryset=UserModel.objects.all(), message="用户已经存在")], label="用户名", help_text="请输入用户名")
-    password = serializers.CharField(write_only=True, allow_blank=True, style={'input_type': 'password'}, label='密码')
+    password = serializers.CharField(write_only=True, allow_blank=True, style={'input_type': 'password'}, label='密码')  # write_only代表只写不返回
     code = serializers.CharField(required=True, max_length=6, min_length=6, help_text="验证码", label="验证码", write_only=True, error_messages={"required": "请输入验证码", "max_length": "验证码要求6位数字", "min_length": "验证码要求6位数字", 'blank': "请输入验证码"})
 
     # 注册用户时，将保存密文密码 （这个功能使用信号量更方便，所有就注释了代码）

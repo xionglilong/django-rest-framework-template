@@ -7,10 +7,12 @@ from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import SmsSerializer, UserRegisterSerializer
-from .models import SmsCodeModel
+from .serializers import SmsSerializer, UserRegisterSerializer, UserDetailSerializer
 from utils.send_sms import AliyunSendSMS  # 发送验证码函数
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import permissions
+from rest_framework import authentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 UserModel = get_user_model()
 
@@ -51,13 +53,15 @@ class SmsCodeViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
             return Response({"mobile": result["message"]}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+class UserViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
     """
     ## 用户注册
     """
     serializer_class = UserRegisterSerializer
     queryset = UserModel.objects.all()
+    authentication_classes = (JWTAuthentication, authentication.SessionAuthentication)  # session认证是浏览器调试使用
 
+    # post请求
     def create(self, request, *args, **kwargs):
         """## 创建一个新用户"""
         serializer = self.get_serializer(data=request.data)
@@ -75,5 +79,26 @@ class UserViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
     def perform_create(self, serializer):
         return serializer.save()
+
+    # 动态获取序列化器，替换 serializer_class 属性
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return UserRegisterSerializer
+        if self.action == 'retrieve':
+            return UserDetailSerializer
+
+    # get请求某个数据模型，delete请求都会用到
+    def get_object(self):
+        return self.request.user  # 用户随机传递URl的id参数都可以返回自己
+
+    # 权限的动态获取，替换 permission_classes 属性
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return permissions.IsAuthenticated(),  # 如果是查询某个具体信息
+        elif self.action == 'create':
+            return ()
+        return []  # 返回默认值空，需要带上别忘了
+
+
 
 
