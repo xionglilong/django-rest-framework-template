@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',  # app: 自定义用户登录注册
     'persons.apps.PersonsConfig',  # app: 人员信息搜集
     'articles.apps.ArticlesConfig',  # app: 新闻文章
+    'goods.apps.GoodsConfig',  # app: 商品
 ]
 
 # rest_framework的全局配置
