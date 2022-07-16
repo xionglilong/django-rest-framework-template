@@ -26,7 +26,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from persons.views import PersonListViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from articles.views import ArticleViewSet
-
+from goods.views import AlipayView
 
 router = DefaultRouter()
 # 自动绑定ViewSet的方法，自动配置路由
@@ -49,6 +49,9 @@ urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # swagger接口文档
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),  # redoc接口文档
+
+    # 支付宝回调
+    path('alipay/return/', AlipayView.as_view(), name='alipay')
 
 
 

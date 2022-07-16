@@ -14,11 +14,10 @@ from alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayR
 from alipay.aop.api.response import AlipayTradePagePayResponse
 from alipay.aop.api.util.SignatureUtils import verify_with_rsa  # 验签
 
-
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(message)s',
-    filemode='a',)
+    filemode='a', )
 logger = logging.getLogger('')
 
 
@@ -52,47 +51,47 @@ class AlipayAPI:
         model.total_amount = price  # 价格
         model.subject = good_name  # 商品名称
         model.product_code = "FAST_INSTANT_TRADE_PAY"
-        model.from_alipay_dict(kwargs)   # 更多参数
+        model.from_alipay_dict(kwargs)  # 更多参数
 
         request = AlipayTradePagePayRequest(biz_model=model)
-        # request.notify_url = 'http://api.example.com/'  # 订单付款成功的回调地址（用户在支付宝app的订单页付款成功也会调用）（异步回调）
-        request.return_url = 'http://www.example.com/'  # 网页付款成功后跳转的地址（用户扫码后关闭页面在手机支付成功是没有跳转的）
+        # request.notify_url = 'http://api.example.com/alipay/return/'  # 订单付款成功的回调地址（用户在支付宝app的订单页付款成功也会调用）（异步回调）
+        request.return_url = 'http://www.example.com/alipay/return/'  # 网页付款成功后跳转的地址（用户扫码后关闭页面在手机支付成功是没有跳转的）
         # 执行API调用
         pay_url = self.client.page_execute(request, http_method='GET')
         return pay_url
 
     # 验签
-    def verify_return_url(self, return_url):
-        # 支付宝公钥（开放平台查询）
-        alipay_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy8NIxcBtphAltjftiHfMAYRgIgSt6LDfSGrRIOVmkOiwbocpo5eX3F5WYlpEzlFghuMZ4DpbyRb9M8Gwjz5R4BgzlPR/qwAKcdhCqJDfS0L0HE9cqJWFoclgqokH44LN/Z1Hyc9JUN2x71LhU/80tK2v9R+hawjHYPPhgadS94xq8AfLHGELklgkbSWxJPi3blhS1cgoSCHoKdO0ywPni0j6IleDEFoeoHG1jWrkEuUsVd/eB6O07aWppndCN5uzQp/fdJUSb1uV1T88EKA42S92r6BZ98Rt+Zgx+CU4sb7jb+EtyVsGVLnzuFADRBA/Wpw4YVk8lp7VKdfRJr0gYQIDAQAB'
+    def verify_from_return_url(self, return_url):
 
         # 取出带签名的数据
         parse_object = urlparse(return_url)
-        query_dict = parse_qs(parse_object.query)  # url参数的字典
-        ali_sign = query_dict.pop('sign')[0]  # 阿里的签名。需要弹出来，因为不属于签名内容。
-        if 'sign_type' in query_dict:
-            sign_type = query_dict.pop('sign_type')[0]  # 这里只是删除掉，不属于签名的内容。这步骤很重要，否则会验签失败。
-
+        param_dict = parse_qs(parse_object.query)  # url参数的字典
         # 整理数据格式
-        query_clean_dict = {}
-        for key, value in query_dict.items():
-            query_clean_dict[key] = value[0]
+        param_dict = {key: value[0] for key, value in param_dict.items()}
+        return self.verify_from_dict(param_dict)
+
+    # 验签
+    def verify_from_dict(self, param_dict: dict) -> bool:
+        # 支付宝公钥（开放平台查询）
+        alipay_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy8NIxcBtphAltjftiHfMAYRgIgSt6LDfSGrRIOVmkOiwbocpo5eX3F5WYlpEzlFghuMZ4DpbyRb9M8Gwjz5R4BgzlPR/qwAKcdhCqJDfS0L0HE9cqJWFoclgqokH44LN/Z1Hyc9JUN2x71LhU/80tK2v9R+hawjHYPPhgadS94xq8AfLHGELklgkbSWxJPi3blhS1cgoSCHoKdO0ywPni0j6IleDEFoeoHG1jWrkEuUsVd/eB6O07aWppndCN5uzQp/fdJUSb1uV1T88EKA42S92r6BZ98Rt+Zgx+CU4sb7jb+EtyVsGVLnzuFADRBA/Wpw4YVk8lp7VKdfRJr0gYQIDAQAB'
+
+        # 删除不属于签名的内容
+        ali_sign = param_dict.pop('sign')  # 阿里的签名。需要弹出来，因为不属于签名内容。
+        if 'sign_type' in param_dict:
+            sign_type = param_dict.pop('sign_type')  # 这里只是删除掉，不属于签名的内容。这步骤很重要，否则会验签失败。
 
         # 排序
-        query_clean_list = self.__ordered_data(query_clean_dict)
+        query_clean_list = self.__ordered_data(param_dict)
 
         # 生成message
         message_str = "&".join("{0}={1}".format(k, v) for k, v in query_clean_list)
 
         # 验签
         message_bytes = message_str.encode()  # 转为utf-8字节码
-        result = verify_with_rsa(alipay_public_key, message_bytes, ali_sign)
-        return result
+        return verify_with_rsa(alipay_public_key, message_bytes, ali_sign)
 
-
-        # verify_res = verify_with_rsa(alipay_public_key, response_content, sign)
-
-    def __ordered_data(self, data):
+    @staticmethod
+    def __ordered_data(data):
         complex_keys = []
         for key, value in data.items():
             if isinstance(value, dict):
@@ -112,5 +111,5 @@ if __name__ == '__main__':
 
     # 验签
     response_url = "http://www.example.com/?charset=utf-8&out_trade_no=20150320010101003&method=alipay.trade.page.pay.return&total_amount=88.88&sign=NLYr2LPsMQy4LOCXytG5%2FA2XGdzMhHqK5vUVEWDhv683RgDxds5zQQjQkyfanFvbEh8L49o%2BUj7jTZrlX4rKHAQE1Bx7aOP9dmGxfEy%2BTM%2FWWA%2Bc8%2BuwDLun5QqobDcg9C9I9Hi066DHNuJnz4sVyC4dbydJwcdRhYs9ewHcRIMaMymGat3oSf84CJq9rtqtxh16L%2FmD7VtCP5eDngG7zGG5Ji48T5c%2FGygavuieJ1dj1TM1uRXzO%2BvMB3cE72GRSgf%2FxQEbJcwtfJ9szheCkS3liIxha6%2B5SukBpoOqU6F8YTb3cU%2FQLj6LI1%2FPQZ8RsZgBSVuGcquVg1Bi%2FYU5fQ%3D%3D&trade_no=2022071622001423620502188224&auth_app_id=2021000121625722&version=1.0&app_id=2021000121625722&sign_type=RSA2&seller_id=2088621987694550&timestamp=2022-07-16+17%3A53%3A02"
-    result = AlipayAPI().verify(response_url)
+    result = AlipayAPI().verify_from_return_url(response_url)
     print(result)
