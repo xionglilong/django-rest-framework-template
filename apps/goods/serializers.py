@@ -3,23 +3,23 @@ from .models import GoodModel, GoodCategoryModel, OrderInfoModel, OrderGoodModel
 from utils.alipay_api import AlipayAPI
 
 
+# 自定义递归字段
+class RecursiveSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+
 # 商品类别 数据序列化器
-class CategorySerializer3(serializers.ModelSerializer):
-    class Meta:
-        model = GoodCategoryModel
-        fields = "__all__"
+class GoodCategorySerializer(serializers.ModelSerializer):
+    # children = RecursiveSerializer(many=True)  # 方法一
+    children = serializers.SerializerMethodField()  # 方法二：注意需要跟下面的get_children()一起。(这里名字和外键反向关联名字是一致的)
 
-
-class CategorySerializer2(serializers.ModelSerializer):
-    sub_category = CategorySerializer3(many=True)  # 这里名字和外键反向关联名字是一致的
-
-    class Meta:
-        model = GoodCategoryModel
-        fields = "__all__"
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    sub_category = CategorySerializer2(many=True)  # 这里名字和外键反向关联名字是一致的
+    # 简单的树状需求，可以就这么写
+    def get_children(self, obj):
+        if obj.children:
+            return GoodCategorySerializer(obj.children, many=True).data
+        return None
 
     class Meta:
         model = GoodCategoryModel
@@ -28,7 +28,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 # 商品 数据序列化器
 class GoodSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
+    category = GoodCategorySerializer()
     images = serializers.ListField()
 
     class Meta:

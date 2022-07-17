@@ -36,9 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',  # 静态文件管理
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_filters',  # 添加过滤器包(django-filter)
+    'django_filters',  # 添加过滤器包 (django-filter)
     'drf_spectacular',  # 自动生成api文档
-    'tinymce',  # 后台管理富文本小部件(django-tinymce)
+    'tinymce',  # 后台管理富文本小部件 (django-tinymce)
+    'mptt',  # 树状模型 (django-mptt)
+    'django_mptt_admin',  # 树状模型后台管理页面 (django-mptt-admin)
     'users.apps.UsersConfig',  # app: 自定义用户登录注册
     'persons.apps.PersonsConfig',  # app: 人员信息搜集
     'articles.apps.ArticlesConfig',  # app: 新闻文章
@@ -104,9 +106,9 @@ TINYMCE_DEFAULT_CONFIG = {
 AUTH_USER_MODEL = 'users.UserModel'
 
 # 自定义登录
-AUTHENTICATION_BACKENDS = (
-    'users.views.CustomAuthenticationBackend',
-)
+# AUTHENTICATION_BACKENDS = (
+#     'users.views.CustomAuthenticationBackend',
+# )
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

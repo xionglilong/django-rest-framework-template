@@ -6,6 +6,7 @@ from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 SEX_CHOICES = [(1, '男'), (0, '女')]
@@ -29,6 +30,22 @@ class UserModel(AbstractUser):
     def __str__(self):
         return self.nickname
 
+
+# 部门表
+class DepartmentModel(MPTTModel):
+    name = models.CharField('部门名称', max_length=128, unique=True)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', verbose_name='父级部门')
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        verbose_name = "部门管理"
+        verbose_name_plural = verbose_name
+        db_table = "auth_department"  # 自定表名
+
+    def __str__(self):
+        return self.name
 
 # 短信验证码表
 class SmsCodeModel(models.Model):

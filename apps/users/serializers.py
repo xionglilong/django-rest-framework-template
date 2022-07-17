@@ -9,9 +9,7 @@ import random
 from datetime import datetime, timedelta
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from persons.models import PersonModel
-from .models import SmsCodeModel
+from .models import SmsCodeModel, DepartmentModel
 from rest_framework.validators import UniqueValidator
 from utils.send_sms import AliyunSendSMS
 
@@ -74,6 +72,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ('username', 'mobile', 'code', 'password')
 
+
+# 部门管理 数据序列化器
+class DepartmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DepartmentModel
+        fields = ('name', 'parent')
 
 # 短信数据序列化器
 class SmsSerializer(serializers.Serializer):  # 这里用不了模型序列化器，因为code为必填字段没法及时填写

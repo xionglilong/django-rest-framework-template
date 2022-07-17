@@ -26,6 +26,10 @@ oss2 = '>=2.15.0'  # aliyun oss api: https://help.aliyun.com/document_detail/320
 crcmod = ">=1.7"  # aliyun oss api dependence: test: import crcmod._crcfunext
 alipay-sdk-python = ">=3.6.227"  # aliyun pay sdk: https://opendocs.alipay.com/common/02np8q
 django-tinymce = ">=3.4.0"  # admin Rich Text widget: https://github.com/jazzband/django-tinymce
+# drf-extra-fields = ">=3.4.0"  # drf extra fields: https://github.com/Hipo/drf-extra-fields
+django-mptt = ">=0.13.4" # tree model: https://github.com/django-mptt/django-mptt/
+django-mptt-admin = "2.2.0" # tree model admin: https://github.com/mbraak/django-mptt-admin
+# django-treebeard = ">=4.5.1"  # tree model (replace django-mptt): https://github.com/django-treebeard/django-treebeard/
 
 [dev-packages]
 

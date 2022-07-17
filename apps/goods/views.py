@@ -2,6 +2,7 @@ from datetime import datetime
 from django.shortcuts import render
 from utils.alipay_api import AlipayAPI
 from .models import OrderInfoModel, GoodCategoryModel
+from .serializers import GoodCategorySerializer
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework import viewsets
@@ -12,8 +13,10 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 
 
-class GoodCategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = GoodCategoryModel.objects.filter(parent_category=None)
+class GoodCategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+    serializer_class = GoodCategorySerializer
+    queryset = GoodCategoryModel.objects.filter(parent=None)
+
 
 class AlipayView(APIView):
     """支付"""
