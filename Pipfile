@@ -25,6 +25,7 @@ alibabacloud-dysmsapi20170525 = ">=2.0.15"  # aliyun send sms: https://next.api.
 oss2 = '>=2.15.0'  # aliyun oss api: https://help.aliyun.com/document_detail/32026.html
 crcmod = ">=1.7"  # aliyun oss api dependence: test: import crcmod._crcfunext
 alipay-sdk-python = ">=3.6.227"  # aliyun pay sdk: https://opendocs.alipay.com/common/02np8q
+django-tinymce = ">=3.4.0"  # admin Rich Text widget: https://github.com/jazzband/django-tinymce
 
 [dev-packages]
 

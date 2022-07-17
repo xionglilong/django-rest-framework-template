@@ -40,4 +40,4 @@ class ArticleModel(models.Model):
         ordering = ('create_time', )
 
     def __str__(self):  # 在后台admin列表中显示的字段
-        return self.title + " —— " + self.owner.nick_name  # 这里填入的字段的数据内容不要为空
+        return self.title + " —— " + self.owner.nickname  # 这里填入的字段的数据内容不要为空

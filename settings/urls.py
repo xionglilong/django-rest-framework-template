@@ -27,6 +27,8 @@ from persons.views import PersonListViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from articles.views import ArticleViewSet
 from goods.views import AlipayView, GoodCategoryViewSet
+from settings import settings
+from django.conf.urls.static import static
 
 router = DefaultRouter()
 # 自动绑定ViewSet的方法，自动配置路由
@@ -35,7 +37,6 @@ router.register(r'codes', SmsCodeViewSet, basename='codes')  # 短信验证码
 router.register(r'users', UserViewSet, basename='users')  # 用户注册、查询个人信息
 router.register(r'articles', ArticleViewSet, basename='articles')   # 文章
 router.register(r'categories', GoodCategoryViewSet, basename='categories')  # 商品分类
-
 
 
 urlpatterns = [
@@ -54,8 +55,20 @@ urlpatterns = [
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),  # redoc接口文档
 
     # 支付宝回调
-    path('alipay/return/', AlipayView.as_view(), name='alipay')
+    path('alipay/return/', AlipayView.as_view(), name='alipay'),
 
-
+    path('tinymce/', include('tinymce.urls')),
 
 ]
+
+# 手动配置静态文件url
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# 手动配置用户上传的媒体文件
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# admin后台配置
+# https://www.liujiangblog.com/course/django/158
+admin.site.empty_value_display = '-空-'  # 字段没有值（例如None，空字符串等等）怎么显示
+admin.site.site_header = '后台管理登录'
+# admin.site.name = 'myadmin'

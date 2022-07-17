@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 from datetime import timedelta
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,16 +28,17 @@ ALLOWED_HOSTS = []
 
 # App配置
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.admin',  # 管理站点后台功能
+    'django.contrib.auth',  # 包含了验证框架的内核和它的默认模型
+    'django.contrib.contenttypes',  # 允许你创建的模型和权限相关联
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  # 静态文件管理
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',  # 添加过滤器包(django-filter)
     'drf_spectacular',  # 自动生成api文档
+    'tinymce',  # 后台管理富文本小部件(django-tinymce)
     'users.apps.UsersConfig',  # app: 自定义用户登录注册
     'persons.apps.PersonsConfig',  # app: 人员信息搜集
     'articles.apps.ArticlesConfig',  # app: 新闻文章
@@ -77,6 +80,25 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer', 'token'),  # header头部的内容开头标记
 }
 
+# admin富文本编辑器
+TINYMCE_DEFAULT_CONFIG = {
+    # 'mode': 'textareas',
+    # 'theme': 'advanced',  # 这个主题没有js文件
+    'theme': 'silver',
+    'width': 800,
+    'height': 600,
+    'language': 'zh_CN',
+    'style_formats': [
+        {'title': 'Bold text', 'inline': 'b'},
+        {'title': 'Red text', 'inline': 'span', 'styles': {'color': '#ff0000'}},
+        {'title': 'Red header', 'block': 'h1', 'styles': {'color': '#ff0000'}},
+        {'title': 'Example 1', 'inline': 'span', 'classes': 'example1'},
+        {'title': 'Example 2', 'inline': 'span', 'classes': 'example2'},
+        {'title': 'Table styles'},
+        {'title': 'Table row 1', 'selector': 'tr', 'classes': 'tablerow1'}
+    ]
+}
+
 
 # 自定义用户模型
 AUTH_USER_MODEL = 'users.UserModel'
@@ -88,11 +110,11 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # 通过请求管理 sessions
     "utils.middleware.CorsMiddleware",  # 允许所有跨域，仅在测试环境使用（自定义的中间件)
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 使用会话将用户和请求关联
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -189,10 +211,13 @@ USE_TZ = False  # 数据库中使用本地时间
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # 静态文件自动搜索路径（自动管理，无须配置url即可访问）
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # 静态文件存储路径（手动管理，需要在urls.py中手动配置）
 
 # 媒体资源路径（drf会自动修改媒体文件url路径）
 MEDIA_URL = '/media/'  # 路径形式
 # MEDIA_URL = 'https://www.example.com/media/'  # 链接形式
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 手动管理媒体文件
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

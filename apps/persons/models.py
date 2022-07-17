@@ -13,7 +13,7 @@ class PersonModel(models.Model):
     name = models.CharField(verbose_name='姓名', max_length=10, help_text="姓名")
     sex = models.BooleanField('性别', choices=SEX_CHOICES, help_text="性别")
     age = models.IntegerField('年龄', blank=True, null=True, help_text="年龄")
-    mail = models.EmailField('邮箱', blank=True, help_text="邮箱")
+    email = models.EmailField('邮箱', blank=True, help_text="邮箱")
     phone = models.CharField('电话', max_length=11, help_text="电话", unique=True)
     description = models.TextField('人员其他详细信息', help_text="人气其他详细信息")
     icon = models.ImageField('头像', upload_to="head/", blank=True, default='', help_text="头像")
