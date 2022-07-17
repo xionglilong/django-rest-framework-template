@@ -1,13 +1,19 @@
 from datetime import datetime
 from django.shortcuts import render
 from utils.alipay_api import AlipayAPI
-from .models import OrderInfoModel
+from .models import OrderInfoModel, GoodCategoryModel
 from rest_framework.response import Response
+from rest_framework import mixins
+from rest_framework import viewsets
+
 
 # Create your views here.
 
 from rest_framework.views import APIView
 
+
+class GoodCategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = GoodCategoryModel.objects.filter(parent_category=None)
 
 class AlipayView(APIView):
     """支付"""

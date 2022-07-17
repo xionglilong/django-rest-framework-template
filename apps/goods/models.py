@@ -15,9 +15,9 @@ class GoodCategoryModel(models.Model):
     code = models.CharField(default="", max_length=30, verbose_name="类别code", help_text="类别code")
     desc = models.TextField(default="", verbose_name="类别描述", help_text="类别描述")
     category_type = models.IntegerField(choices=CATEGORY_TYPE, verbose_name="类目级别", help_text="类目级别")
-    parent_category = models.ForeignKey("self", null=True, blank=True, verbose_name="父类目级别", help_text="父目录", related_name="sub_cat", on_delete=models.CASCADE)
+    parent_category = models.ForeignKey("self", null=True, blank=True, verbose_name="父目录", help_text="父目录", related_name="sub_category", on_delete=models.CASCADE)
     is_tab = models.BooleanField(default=False, verbose_name="是否导航", help_text="是否导航")
-    add_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = "商品类别"
@@ -32,7 +32,7 @@ class GoodModel(models.Model):
     商品
     """
     category = models.ForeignKey(GoodCategoryModel, verbose_name="商品类目", on_delete=models.CASCADE)
-    good_sn = models.CharField(max_length=50, default="", verbose_name="商品唯一货号")
+    good_sn = models.CharField(max_length=50, default="", verbose_name="商品唯一货号", unique=True)
     name = models.CharField(max_length=100, verbose_name="商品名")
     click_num = models.IntegerField(default=0, verbose_name="点击数")
     sold_num = models.IntegerField(default=0, verbose_name="商品销售量")
@@ -43,11 +43,11 @@ class GoodModel(models.Model):
     brief_desc = models.TextField(max_length=500, verbose_name="商品简短描述")
     desc = models.TextField(verbose_name="内容", default='')
     ship_free = models.BooleanField(default=True, verbose_name="是否承担运费")
-    front_image = models.ImageField(upload_to="goods/images/", null=True, blank=True, verbose_name="封面图")
+    front_image = models.ImageField(upload_to="goods/images/", null=True, blank=True, verbose_name="封面图", max_length=200)
     images = models.TextField('商品图片列表')
     is_new = models.BooleanField(default=False, verbose_name="是否新品")
     is_hot = models.BooleanField(default=False, verbose_name="是否热销")
-    add_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = '商品'

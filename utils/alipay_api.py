@@ -90,6 +90,7 @@ class AlipayAPI:
         message_bytes = message_str.encode()  # 转为utf-8字节码
         return verify_with_rsa(alipay_public_key, message_bytes, ali_sign)
 
+    # 验签前排序
     @staticmethod
     def __ordered_data(data):
         complex_keys = []

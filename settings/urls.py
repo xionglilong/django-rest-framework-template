@@ -26,7 +26,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from persons.views import PersonListViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from articles.views import ArticleViewSet
-from goods.views import AlipayView
+from goods.views import AlipayView, GoodCategoryViewSet
 
 router = DefaultRouter()
 # 自动绑定ViewSet的方法，自动配置路由
@@ -34,6 +34,9 @@ router.register(r'persons', PersonListViewSet, basename='persons')  # 人员信�
 router.register(r'codes', SmsCodeViewSet, basename='codes')  # 短信验证码
 router.register(r'users', UserViewSet, basename='users')  # 用户注册、查询个人信息
 router.register(r'articles', ArticleViewSet, basename='articles')   # 文章
+router.register(r'categories', GoodCategoryViewSet, basename='categories')  # 商品分类
+
+
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -4,8 +4,23 @@ from utils.alipay_api import AlipayAPI
 
 
 # 商品类别 数据序列化器
+class CategorySerializer3(serializers.ModelSerializer):
+    class Meta:
+        model = GoodCategoryModel
+        fields = "__all__"
+
+
+class CategorySerializer2(serializers.ModelSerializer):
+    sub_category = CategorySerializer3(many=True)  # 这里名字和外键反向关联名字是一致的
+
+    class Meta:
+        model = GoodCategoryModel
+        fields = "__all__"
+
+
 class CategorySerializer(serializers.ModelSerializer):
-    # sub_cat = CategorySerializer2(many=True)
+    sub_category = CategorySerializer2(many=True)  # 这里名字和外键反向关联名字是一致的
+
     class Meta:
         model = GoodCategoryModel
         fields = "__all__"
