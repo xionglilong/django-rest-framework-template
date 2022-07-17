@@ -28,8 +28,9 @@ alipay-sdk-python = ">=3.6.227"  # aliyun pay sdk: https://opendocs.alipay.com/c
 django-tinymce = ">=3.4.0"  # admin Rich Text widget: https://github.com/jazzband/django-tinymce
 # drf-extra-fields = ">=3.4.0"  # drf extra fields: https://github.com/Hipo/drf-extra-fields
 django-mptt = ">=0.13.4" # tree model: https://github.com/django-mptt/django-mptt/
-django-mptt-admin = "2.2.0" # tree model admin: https://github.com/mbraak/django-mptt-admin
+django-mptt-admin = ">=2.2.0" # tree model admin: https://github.com/mbraak/django-mptt-admin
 # django-treebeard = ">=4.5.1"  # tree model (replace django-mptt): https://github.com/django-treebeard/django-treebeard/
+# djangorestframework-jsonapi = ">=5.0.0"  # json api formatting: https://github.com/django-json-api/django-rest-framework-json-api
 
 [dev-packages]
 
