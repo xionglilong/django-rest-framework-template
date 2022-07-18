@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 from .models import GoodCategoryModel, GoodModel, ShoppingCartModel, OrderInfoModel, OrderGoodModel
 from tinymce.widgets import AdminTinyMCE
-from settings.admin import GenericModelAdminClass
+from utils.app.admin import GenericModelAdminClass
 
 
 @admin.register(GoodCategoryModel)

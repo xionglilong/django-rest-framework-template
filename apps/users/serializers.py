@@ -21,7 +21,7 @@ UserModel = get_user_model()
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ('username', 'nick_name', 'icon', 'birthday', 'mobile')
+        fields = ('username', 'nickname', 'icon', 'birthday', 'mobile')
 
 
 # 用户注册数据序列化器

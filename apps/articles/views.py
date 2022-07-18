@@ -16,12 +16,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 @extend_schema_view(
-    list=extend_schema(description='查询文章列表'),
-    create=extend_schema(description='新增一个文章信息'),
-    retrieve=extend_schema(description='查询某个文章内容'),
-    update=extend_schema(description='更新某个文章内容'),
-    partial_update=extend_schema(description='部分更新某个文章内容'),
-    destroy=extend_schema(description='删除某个文章'),
+    list=extend_schema(tags=['文章管理'], operation_id='查看列表', description='查询文章列表'),
+    create=extend_schema(tags=['文章管理'], operation_id='创建文章', description='新增一个文章信息'),
+    retrieve=extend_schema(tags=['文章管理'], operation_id='文章详情', description='查询某个文章内容'),
+    update=extend_schema(tags=['文章管理'], operation_id='更新文章', description='更新某个文章内容'),
+    partial_update=extend_schema(tags=['文章管理'], operation_id='部分更新', description='部分更新某个文章字段'),
+    destroy=extend_schema(tags=['文章管理'], operation_id='删除文章', description='删除某个文章'),
 )
 class ArticleViewSet(viewsets.ModelViewSet):
     """
@@ -36,6 +36,14 @@ class ArticleViewSet(viewsets.ModelViewSet):
         return ArticleModel.objects.filter(owner=self.request.user)
 
 
+@extend_schema_view(
+    list=extend_schema(tags=['文章标签管理'], operation_id='查看标签列表', description='查询文章列表'),
+    create=extend_schema(tags=['文章标签管理'], operation_id='创建标签', description='新增一个标签信息'),
+    retrieve=extend_schema(tags=['文章标签管理'], operation_id='标签详情', description='查询某个标签内容'),
+    update=extend_schema(tags=['文章标签管理'], operation_id='更新标签', description='更新某个标签'),
+    partial_update=extend_schema(tags=['文章标签管理'], operation_id='部分字段更新', description='部分更新某个标签字段'),
+    destroy=extend_schema(tags=['文章标签管理'], operation_id='删除标签', description='删除某个标签'),
+)
 class ArticleTagViewSet(viewsets.ModelViewSet):
     """
     ## 文章标签管理

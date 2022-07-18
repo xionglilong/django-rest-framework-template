@@ -11,6 +11,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 class ArticleTagSerializer(serializers.ModelSerializer):
+    """文章标签 序列化器"""
     class Meta:
         model = ArticleTagModel
         fields = '__all__'

@@ -2,7 +2,7 @@
 from typing import Type
 
 from django.contrib import admin
-from settings.admin import GenericModelAdminClass
+from utils.app.admin import GenericModelAdminClass
 from .models import ArticleModel, ArticleTagModel
 from django.db import models
 from django.contrib.auth import get_user_model
