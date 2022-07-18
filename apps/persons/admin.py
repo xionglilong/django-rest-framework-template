@@ -5,7 +5,6 @@ from .models import PersonModel, FamilyModel
 @admin.register(PersonModel)
 class PersonAdmin(admin.ModelAdmin):
     list_display = [field.name for field in PersonModel._meta.get_fields() if field.name not in ('families',)]  # 排除需要显示的字段
-    empty_value_display = '-empty-'
     date_hierarchy = 'create_time'  # 时间过滤器的时间字段
     list_editable = ('name', )  # 可直接在列表页修改的字段
     search_fields = ('name',)  # 搜索栏可搜索的字段

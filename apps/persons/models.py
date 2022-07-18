@@ -60,3 +60,7 @@ class FamilyModel(models.Model):
     def __str__(self):
         return self.relation
 
+    class Meta:
+        verbose_name = "家庭成员"
+        verbose_name_plural = verbose_name  # 后台admin中，复数形式展示
+

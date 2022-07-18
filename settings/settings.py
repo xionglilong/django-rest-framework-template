@@ -86,10 +86,14 @@ SIMPLE_JWT = {
 TINYMCE_DEFAULT_CONFIG = {
     # 'mode': 'textareas',
     # 'theme': 'advanced',  # 这个主题没有js文件
-    'theme': 'silver',
     'width': 800,
     'height': 600,
-    'language': 'zh_CN',
+    'theme': 'silver',  # 主题
+    'language': 'zh_CN',  # 中文
+    'menubar': 'edit format',  # 菜单栏
+    'plugins': 'lists,advlist bold underline alignleft aligncenter alignright fontselect fontsizeselect code image link table',
+    'toolbar': 'bullist numlist bold underline alignleft aligncenter alignright fontselect fontsizeselect code image link table',
+    'images_upload_url': '/uploading/',   # 图片上传处理视图
     'style_formats': [
         {'title': 'Bold text', 'inline': 'b'},
         {'title': 'Red text', 'inline': 'span', 'styles': {'color': '#ff0000'}},
@@ -206,6 +210,8 @@ LANGUAGE_CODE = 'zh-hans'  # 中文
 TIME_ZONE = 'Asia/Shanghai'  # 时区为上海
 
 USE_I18N = True  # 加载国际化支持机制
+# DATETIME_FORMAT = 'Y-m-d H:i:s'  # 加载国际化支持后，这两个参数会被覆盖，就注释掉
+# DATE_FORMAT = 'Y-m-d'
 
 USE_TZ = False  # 数据库中使用本地时间
 

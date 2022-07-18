@@ -15,7 +15,6 @@ class UserAdmin(admin.ModelAdmin):
 # 部门管理
 @admin.register(DepartmentModel)
 class DepartmentAdmin(DjangoMpttAdmin):
-    # item_label_field_name = 'name'
     search_fields = ('name', )
     list_filter = ('name',)
 

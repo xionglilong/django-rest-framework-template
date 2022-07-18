@@ -47,9 +47,17 @@ class DepartmentModel(MPTTModel):
     def __str__(self):
         return self.name
 
+
 # 短信验证码表
 class SmsCodeModel(models.Model):
     mobile = models.CharField('手机号', max_length=11)
     code = models.CharField('验证码', max_length=4)
     used = models.BooleanField('是否被使用', default=0)
     create_time = models.DateTimeField('创建时间', auto_now_add=True)
+
+    def __str__(self):
+        return self.mobile + '：' + self.code
+
+    class Meta:
+        verbose_name = "短信验证码"
+        verbose_name_plural = verbose_name

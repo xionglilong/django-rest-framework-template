@@ -18,17 +18,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+# ----------django模块导入------------
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
+# ----------第三方包模块导入-----------
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+# ----------app 模块导入------------
+from settings import settings
 from persons.views import PersonListViewSet
 from users.views import SmsCodeViewSet, UserViewSet
-from articles.views import ArticleViewSet
+from articles.views import ArticleViewSet, uploading
 from goods.views import AlipayView, GoodCategoryViewSet
-from settings import settings
-from django.conf.urls.static import static
 
 router = DefaultRouter()
 # 自动绑定ViewSet的方法，自动配置路由
@@ -57,11 +61,13 @@ urlpatterns = [
     # 支付宝回调
     path('alipay/return/', AlipayView.as_view(), name='alipay'),
 
+    # admin富文本（django-tinymce）
     path('tinymce/', include('tinymce.urls')),
+    path('uploading/', uploading, name='uploading')
 
 ]
 
-# 手动配置静态文件url
+# 手动配置静态文件url（静态文件可以自动管理，这里就注释掉）
 # urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # 手动配置用户上传的媒体文件
@@ -70,5 +76,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # admin后台配置
 # https://www.liujiangblog.com/course/django/158
 admin.site.empty_value_display = '-空-'  # 字段没有值（例如None，空字符串等等）怎么显示
-admin.site.site_header = '后台管理登录'
+admin.site.site_header = '后台管理登录'  # 页面显示的标题
+admin.site.site_title = '后台管理系统'  # 页面头部标题
+admin.site.index_title = '后台管理系统'
 # admin.site.name = 'myadmin'

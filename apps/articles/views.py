@@ -1,8 +1,12 @@
 # Generic views: https://www.django-rest-framework.org/api-guide/generic-views/
 
 from django.shortcuts import render
+import os
+from django.http import JsonResponse
+from django.conf import settings
 from .models import ArticleModel
 from .serializers import ArticleSerializer, ArticleTagSerializer
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
@@ -48,3 +52,14 @@ class ArticleTagViewSet(viewsets.ModelViewSet):
         return ArticleModel.objects.filter(owner=self.request.user)
 
 
+# 文章图片上传
+@csrf_exempt
+def uploading(request):
+    img_obj = request.FILES.get('file')
+    file_url = os.path.join(settings.MEDIA_ROOT, img_obj.name)
+    with open(file_url, "wb") as file:
+        data = img_obj.file.read()
+        file.write(data)
+    return JsonResponse({
+        "location": '/media/' + img_obj.name
+    })
