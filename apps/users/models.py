@@ -35,6 +35,7 @@ class UserModel(AbstractUser):
 class DepartmentModel(MPTTModel):
     name = models.CharField('部门名称', max_length=128, unique=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', verbose_name='父级部门')
+    create_time = models.DateTimeField('创建时间', default=datetime.now)
 
     class MPTTMeta:
         order_insertion_by = ['name']

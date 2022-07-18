@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth import get_user_model  # UserModel的快捷方式，当然你也可以自己手动导入用户的Model
 
@@ -17,11 +19,11 @@ class PersonModel(models.Model):
     phone = models.CharField('电话', max_length=11, help_text="电话", unique=True)
     description = models.TextField('人员其他详细信息', help_text="人气其他详细信息")
     icon = models.ImageField('头像', upload_to="head/", blank=True, default='', help_text="头像")
-    create_time = models.DateTimeField('创建时间', auto_now_add=True, editable=False, help_text="创建时间")
     owner = models.ForeignKey(UserModel, related_name='persons', on_delete=models.CASCADE, verbose_name='创建人', help_text="创建人")  # 把数据外键关联到一个所有者
+    create_time = models.DateTimeField('创建时间', auto_now_add=True, editable=False, help_text="创建时间")
 
     class Meta:
-        ordering = ('create_time', '-age')  # 默认排序为创建时间正序，年龄字段倒序
+        ordering = ('-create_time',)  # admin列表页默认初始排序规则
         verbose_name = "人员信息表"
         verbose_name_plural = verbose_name  # 后台admin中，复数形式展示
 
@@ -56,6 +58,7 @@ class FamilyModel(models.Model):
     # 外键,数据库键名:person_id,关联到了Person表id键
     # 可以通过关联名related_name反向查询子表的数据，当然也可以通过"小写的子表名_set"的形式代替
     person = models.ForeignKey(PersonModel, on_delete=models.CASCADE, related_name='families', help_text="所属人")
+    create_time = models.DateTimeField('创建时间', default=datetime.datetime.now, editable=False, help_text="创建时间")
 
     def __str__(self):
         return self.relation
@@ -63,4 +66,5 @@ class FamilyModel(models.Model):
     class Meta:
         verbose_name = "家庭成员"
         verbose_name_plural = verbose_name  # 后台admin中，复数形式展示
+        ordering = ('-create_time',)  # admin列表页默认初始排序规则
 

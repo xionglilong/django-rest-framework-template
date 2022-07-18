@@ -10,18 +10,18 @@ mysqlclient = "~=2.1.1"
 # -----djangorestframework Dependence-----
 pyyaml = ">=6.0"  # api document
 uritemplate = ">=4.1.1"  # api document
-markdown = ">=3.3.7"  #  browsable API page
+markdown = ">=3.4.1"  #  browsable API page
 pygments = ">=2.12.0"  # browsable API page, markdown highlight
 django-filter = ">=22.1"  # filter function
 django-guardian = ">=2.4.0"  # object level permission
 # -----djangorestframework other Dependence---
-djangorestframework-simplejwt = ">=5.1.0"  # JSON Web Token authentication: https://github.com/jazzband/djangorestframework-simplejwt
+djangorestframework-simplejwt = ">=5.2.0"  # JSON Web Token authentication: https://github.com/jazzband/djangorestframework-simplejwt
 drf-spectacular = ">=0.22.1"  # auto api document page: https://github.com/tfranzel/drf-spectacular
 drf-extensions = ">=0.7.1"  # drf caching: https://github.com/chibisov/drf-extensions
 django-redis = ">=5.2.0"  # django redis: https://github.com/jazzband/django-redis
 pillow = ">=9.2.0"  # models.ImageField dependence
 # ---------------others--------------------
-alibabacloud-dysmsapi20170525 = ">=2.0.15"  # aliyun send sms: https://next.api.aliyun.com/document/Dysmsapi/2017-05-25/SendSms
+alibabacloud-dysmsapi20170525 = ">=2.0.16"  # aliyun send sms: https://next.api.aliyun.com/document/Dysmsapi/2017-05-25/SendSms
 oss2 = '>=2.15.0'  # aliyun oss api: https://help.aliyun.com/document_detail/32026.html
 crcmod = ">=1.7"  # aliyun oss api dependence: test: import crcmod._crcfunext
 alipay-sdk-python = ">=3.6.227"  # aliyun pay sdk: https://opendocs.alipay.com/common/02np8q

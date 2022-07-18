@@ -23,6 +23,7 @@ class GoodCategoryModel(models.Model):
     class Meta:
         verbose_name = "商品类别"
         verbose_name_plural = verbose_name
+        ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return self.name
@@ -53,6 +54,7 @@ class GoodModel(models.Model):
     class Meta:
         verbose_name = '商品'
         verbose_name_plural = verbose_name
+        ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return self.name
@@ -66,12 +68,13 @@ class ShoppingCartModel(models.Model):
     good = models.ForeignKey(GoodModel, verbose_name="商品", on_delete=models.CASCADE)
     num = models.IntegerField(default=0, verbose_name="购买数量")
 
-    add_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = '购物车'
         verbose_name_plural = verbose_name
         unique_together = ("owner", "good")
+        ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return "%s(%d)".format(self.good.name, self.num)
@@ -107,6 +110,7 @@ class OrderInfoModel(models.Model):
     class Meta:
         verbose_name = "订单"
         verbose_name_plural = verbose_name
+        ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return str(self.order_sn)
@@ -120,11 +124,12 @@ class OrderGoodModel(models.Model):
     good = models.ForeignKey(GoodModel, verbose_name="商品", on_delete=models.CASCADE, db_constraint=False)
     num = models.IntegerField(default=0, verbose_name="商品数量")
 
-    add_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = "订单商品"
         verbose_name_plural = verbose_name
+        ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return str(self.order.order_sn)

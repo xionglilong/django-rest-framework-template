@@ -22,3 +22,5 @@ class PersonSerializer(serializers.ModelSerializer):
         model = PersonModel
         fields = ('id', 'name', 'sex', 'age', 'mail', 'phone', 'owner', 'families')  # 如果后期后删除和更新操作，需要返回id
         # fields = "__all__"  # 这里是映射模型的所有字段
+
+
