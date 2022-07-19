@@ -52,11 +52,12 @@ class SmsCodeViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
         else:  # 如果发送失败
             return Response({"mobile": result["message"]}, status=status.HTTP_400_BAD_REQUEST)
 
+    class Meta:
+        tags = ['短信验证码']
 
+
+# 用户注册
 class UserViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
-    """
-    ## 用户注册
-    """
     serializer_class = UserRegisterSerializer
     queryset = UserModel.objects.all()
     authentication_classes = (JWTAuthentication, authentication.SessionAuthentication)  # session认证是浏览器调试使用
@@ -98,6 +99,9 @@ class UserViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.Retri
         elif self.action == 'create':
             return ()
         return []  # 返回默认值空，需要带上别忘了
+
+    class Meta:
+        tags = ['用户']
 
 
 

@@ -20,7 +20,7 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PersonModel
-        fields = ('id', 'name', 'sex', 'age', 'email', 'phone', 'owner', 'families')  # 如果后期后删除和更新操作，需要返回id
+        fields = ('id', 'name', 'sex', 'age', 'email', 'phone', 'owner', 'families', 'create_time')  # 如果后期后删除和更新操作，需要返回id
         # fields = "__all__"  # 这里是映射模型的所有字段
 
 

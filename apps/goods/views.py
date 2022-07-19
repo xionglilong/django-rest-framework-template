@@ -17,6 +17,9 @@ class GoodCategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins
     serializer_class = GoodCategorySerializer
     queryset = GoodCategoryModel.objects.filter(parent=None)
 
+    class Meta:
+        tags = ['商品类别']
+
 
 class AlipayView(APIView):
     """支付"""
@@ -49,4 +52,7 @@ class AlipayView(APIView):
                 order.pay_time = datetime.now()
                 order.save()
             return True
+
+    class Meta:
+        tags = ['支付']
 

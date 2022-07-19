@@ -49,6 +49,8 @@ INSTALLED_APPS = [
 
 # rest_framework的全局配置
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",  # 序列化器日期时间格式配置
+    'DATE_FORMAT': "%Y-%m-%d",  # 序列化器时间格式
     # 分页功能的全局设置
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # 修改默认的分页类型，使用每页数量和页面编号来分页
     'PAGE_SIZE': 20,  # 每个页面的数量，配置完后立马有分页功能，并且json数据格式会调整，还会多出几个字段：count、next、previous，文件路径字段还会添加完整域名
@@ -58,7 +60,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',  # 依赖django的SessionMiddleware、AuthenticationMiddleware，一般浏览器常见，前后端分离一般不用，不过内置文档功能要用
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # 这个不建议全局配置，建议在ViewSet单独配置，因为如果传过来的token过期了会报错，可能导致公共数据查询失败
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # drf-spectacular api文档配置
+    # 'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # drf-spectacular api文档配置
+    'DEFAULT_SCHEMA_CLASS': 'utils.app.openapi.CustomAutoSchema',  # drf-spectacular api文档配置
 }
 
 # drf-spectacular api文档配置: https://github.com/tfranzel/drf-spectacular

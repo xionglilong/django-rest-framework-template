@@ -46,14 +46,22 @@ class PersonListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     #    age_min = self.request.query_params.get('age_min', 0)
     #    return queryset.filter(age__gt=int(age_min))  # 自定义一个过滤选项，这里只是演示功能，不建议这么使用过滤，太麻烦
 
+    class Meta:
+        tags = ['人员信息']
+
 
 class FamilyViewSet(viewsets.ModelViewSet):
     """家庭关系视图集"""
     queryset = FamilyModel
     serializer_class = FamilySerializer
 
+    class Meta:
+        tags = ['家庭关系']
+
 # 这里是手动绑定http请求和操作数据的模型Mixin方法（跟之前的在视图类里面的绑定有点像），然后直接放到urls.py里面的path()里面的视图参数里面
 # 也可以在urls.py用路由器router对象自动绑定默认行为和注册url，这样更方便。
 # person_list = PersonListViewSet.as_view({
 #     'get': 'list',
 # })
+
+
