@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from utils.app.models import GenericModelClass
+from utils.app.models import GenericModelClass, GenericModel, OwnerModelClass
 
 UserModel = get_user_model()
 
@@ -14,8 +14,8 @@ class GoodCategoryModel(metaclass=GenericModelClass):
 
     name = models.CharField(default="", max_length=30, verbose_name="类别名", help_text="类别名")
     code = models.CharField(default="", max_length=30, verbose_name="类别code", help_text="类别code")
-    description = models.TextField(default="", verbose_name="类别描述", help_text="类别描述")
-    category_type = models.IntegerField(choices=CATEGORY_TYPE, verbose_name="类目级别", help_text="类目级别")
+    description = models.TextField(default="", verbose_name="类别描述", help_text="类别描述", blank=True)
+    category_type = models.IntegerField(choices=CATEGORY_TYPE, verbose_name="类目级别", help_text="类目级别", default=1)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, db_constraint=False, related_name='children', verbose_name='父级类别')  # db_constraint=False代表不在数据库层面创建约束
     # db_constraint 控制是否在数据库中为此外键创建约束，默认为True。在数据库中创建外键约束是数据库规范中明令禁止的行为
     is_tab = models.BooleanField(default=False, verbose_name="是否导航", help_text="是否导航")
@@ -23,10 +23,6 @@ class GoodCategoryModel(metaclass=GenericModelClass):
     class Meta:
         verbose_name = "商品类别"
         verbose_name_plural = verbose_name
-        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
-
-    # def __str__(self):
-    #     return self.name
 
 
 class GoodModel(metaclass=GenericModelClass):
@@ -49,26 +45,18 @@ class GoodModel(metaclass=GenericModelClass):
     images = models.CharField('商品图片列表', max_length=1024)
     is_new = models.BooleanField(default=False, verbose_name="是否新品")
     is_hot = models.BooleanField(default=False, verbose_name="是否热销")
-    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = '商品'
         verbose_name_plural = verbose_name
-        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
-
-    # def __str__(self):
-    #     return self.name
 
 
-class ShoppingCartModel(metaclass=GenericModelClass):
+class ShoppingCartModel(metaclass=OwnerModelClass):
     """
     购物车
     """
-    owner = models.ForeignKey(UserModel, verbose_name="用户", on_delete=models.CASCADE)
     good = models.ForeignKey(GoodModel, verbose_name="商品", on_delete=models.CASCADE)
     num = models.IntegerField(default=0, verbose_name="购买数量")
-
-    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = '购物车'
@@ -80,7 +68,7 @@ class ShoppingCartModel(metaclass=GenericModelClass):
         return "%s(%d)".format(self.good.name, self.num)
 
 
-class OrderInfoModel(metaclass=GenericModelClass):
+class OrderInfoModel(metaclass=OwnerModelClass):
     """
     订单
     """
@@ -105,18 +93,12 @@ class OrderInfoModel(metaclass=GenericModelClass):
     receive_name = models.CharField(max_length=20, default="", verbose_name="签收人")
     receive_mobile = models.CharField(max_length=11, verbose_name="联系电话")
 
-    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
-
     class Meta:
         verbose_name = "订单"
         verbose_name_plural = verbose_name
-        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
-
-    # def __str__(self):
-    #     return str(self.order_sn)
 
 
-class OrderGoodModel(metaclass=GenericModelClass):
+class OrderGoodModel(GenericModel, metaclass=GenericModelClass):
     """
     订单的商品详情
     """
@@ -124,12 +106,9 @@ class OrderGoodModel(metaclass=GenericModelClass):
     good = models.ForeignKey(GoodModel, verbose_name="商品", on_delete=models.CASCADE, db_constraint=False)
     num = models.IntegerField(default=0, verbose_name="商品数量")
 
-    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
-
     class Meta:
         verbose_name = "订单商品"
         verbose_name_plural = verbose_name
-        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return str(self.order.order_sn)

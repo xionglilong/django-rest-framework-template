@@ -15,14 +15,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
-# @extend_schema_view(
-#     list=extend_schema(tags=['文章管理'], operation_id='查看列表', description='查询文章列表'),
-#     create=extend_schema(tags=['文章管理'], operation_id='创建文章', description='新增一个文章信息'),
-#     retrieve=extend_schema(tags=['文章管理'], operation_id='文章详情', description='查询某个文章内容'),
-#     update=extend_schema(tags=['文章管理'], operation_id='更新文章', description='更新某个文章内容'),
-#     partial_update=extend_schema(tags=['文章管理'], operation_id='部分更新', description='部分更新某个文章字段'),
-#     destroy=extend_schema(tags=['文章管理'], operation_id='删除文章', description='删除某个文章'),
-# )
 class ArticleViewSet(viewsets.ModelViewSet):
     """
     ## 文章管理
