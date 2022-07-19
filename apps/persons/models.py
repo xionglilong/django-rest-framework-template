@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.contrib.auth import get_user_model  # UserModel的快捷方式，当然你也可以自己手动导入用户的Model
+from utils.app.models import GenericModelClass
 
 
 UserModel = get_user_model()
@@ -10,7 +11,7 @@ SEX_CHOICES = [(1, '男'), (0, '女')]
 
 
 # 人员信息表
-class PersonModel(models.Model):
+class PersonModel(metaclass=GenericModelClass):
     # id = models.IntegerField(primary_key=True)  # 手动设置主键，不建议填写，django会自动添加id主键，这里只是手写示例
     name = models.CharField(verbose_name='姓名', max_length=10, help_text="姓名")
     sex = models.BooleanField('性别', choices=SEX_CHOICES, help_text="性别")
@@ -20,15 +21,15 @@ class PersonModel(models.Model):
     description = models.TextField('人员其他详细信息', help_text="人气其他详细信息")
     icon = models.ImageField('头像', upload_to="head/", blank=True, default='', help_text="头像")
     owner = models.ForeignKey(UserModel, related_name='persons', on_delete=models.CASCADE, verbose_name='创建人', help_text="创建人")  # 把数据外键关联到一个所有者
-    create_time = models.DateTimeField('创建时间', auto_now_add=True, editable=False, help_text="创建时间")
+    # create_time = models.DateTimeField('创建时间', auto_now_add=True, editable=False, help_text="创建时间")
 
     class Meta:
-        ordering = ('-create_time',)  # admin列表页默认初始排序规则
+        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
         verbose_name = "人员信息表"
         verbose_name_plural = verbose_name  # 后台admin中，复数形式展示
 
-    def __str__(self):  # 在后台admin列表中显示的字段
-        return self.name  # 这里填入的字段的数据内容不要为空
+    # def __str__(self):  # 在后台admin列表中显示的字段
+    #     return self.name  # 这里填入的字段的数据内容不要为空
 
     # 如果需要处理保存前的模型数据，重写save()，这里只是示例
     def save(self, *args, **kwargs):
@@ -49,22 +50,22 @@ RELATION_CHOICES = [('父亲', '父亲'), ('母亲', '母亲'), ('姐姐', '姐�
 
 
 # 家庭成员表
-class FamilyModel(models.Model):
+class FamilyModel(metaclass=GenericModelClass):
+    name = models.CharField(verbose_name='姓名', max_length=10, help_text="姓名")
     objects = FamilyManager()  # 加载自定义的管理器
     relation = models.CharField('关系', max_length=10, choices=RELATION_CHOICES, help_text="关系")
-    name = models.CharField(verbose_name='姓名', max_length=10, help_text="姓名")
     mobile = models.CharField('电话', max_length=20, blank=True, default='', help_text="电话")
 
     # 外键,数据库键名:person_id,关联到了Person表id键
     # 可以通过关联名related_name反向查询子表的数据，当然也可以通过"小写的子表名_set"的形式代替
-    person = models.ForeignKey(PersonModel, on_delete=models.CASCADE, related_name='families', help_text="所属人")
+    person = models.ForeignKey(PersonModel, on_delete=models.CASCADE, related_name='families', help_text="所属人", verbose_name='所属人')
     create_time = models.DateTimeField('创建时间', default=datetime.datetime.now, editable=False, help_text="创建时间")
 
-    def __str__(self):
-        return self.relation
+    # def __str__(self):
+    #     return self.relation
 
     class Meta:
         verbose_name = "家庭成员"
         verbose_name_plural = verbose_name  # 后台admin中，复数形式展示
-        ordering = ('-create_time',)  # admin列表页默认初始排序规则
+        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
 

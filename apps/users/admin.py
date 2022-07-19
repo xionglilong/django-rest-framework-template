@@ -11,7 +11,7 @@ from utils.app.admin import GenericModelAdminClass
 class UserAdmin(admin.ModelAdmin, metaclass=GenericModelAdminClass):
     model = UserModel
     # ------------------------------------ 列表页配置 ------------------------------------
-    search_fields = ('nickname', 'mobile', 'username')  # 列表页搜索功能的查询范围
+    search_fields = ('name', 'mobile', 'username')  # 列表页搜索功能的查询范围
     list_filter = ('sex',)  # 列表过滤器的字段
     date_hierarchy = 'date_joined'  # 列表页时间过滤器的字段
 

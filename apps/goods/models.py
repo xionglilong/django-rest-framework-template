@@ -1,66 +1,66 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from utils.app.models import GenericModelClass
 
 UserModel = get_user_model()
 
 
-class GoodCategoryModel(models.Model):
+class GoodCategoryModel(metaclass=GenericModelClass):
     """
     商品类别
+        类别的外键是关联到自己，可以做无限循环的树状结构。但是一般用第三方包实现，比如：django-mptt、django-treebeard
     """
     CATEGORY_TYPE = ((1, "一级类目"), (2, "二级类目"), (3, "三级类目"), )
 
     name = models.CharField(default="", max_length=30, verbose_name="类别名", help_text="类别名")
     code = models.CharField(default="", max_length=30, verbose_name="类别code", help_text="类别code")
-    desc = models.TextField(default="", verbose_name="类别描述", help_text="类别描述")
+    description = models.TextField(default="", verbose_name="类别描述", help_text="类别描述")
     category_type = models.IntegerField(choices=CATEGORY_TYPE, verbose_name="类目级别", help_text="类目级别")
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, db_constraint=False, related_name='children', verbose_name='父级类别')  # db_constraint=False代表不在数据库层面创建约束
     # db_constraint 控制是否在数据库中为此外键创建约束，默认为True。在数据库中创建外键约束是数据库规范中明令禁止的行为
     is_tab = models.BooleanField(default=False, verbose_name="是否导航", help_text="是否导航")
-    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = "商品类别"
         verbose_name_plural = verbose_name
-        ordering = ('-create_time',)  # admin列表页默认初始排序规则
+        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 
-class GoodModel(models.Model):
+class GoodModel(metaclass=GenericModelClass):
     """
     商品
     """
+    name = models.CharField(max_length=100, verbose_name="商品名")
     category = models.ForeignKey(GoodCategoryModel, verbose_name="商品类目", on_delete=models.CASCADE)
     good_sn = models.CharField(max_length=50, default="", verbose_name="商品唯一货号", unique=True)
-    name = models.CharField(max_length=100, verbose_name="商品名")
     click_num = models.IntegerField(default=0, verbose_name="点击数")
     sold_num = models.IntegerField(default=0, verbose_name="商品销售量")
     fav_num = models.IntegerField(default=0, verbose_name="收藏数")
     good_num = models.IntegerField(default=0, verbose_name="库存数")
     market_price = models.FloatField(default=0, verbose_name="市场价格")
     shop_price = models.FloatField(default=0, verbose_name="本店价格")
-    brief_desc = models.TextField(max_length=500, verbose_name="商品简短描述")
-    desc = models.TextField(verbose_name="内容", default='')
+    brief_desc = models.CharField(max_length=500, verbose_name="商品简短描述")
+    description = models.TextField(verbose_name="内容", default='')
     ship_free = models.BooleanField(default=True, verbose_name="是否承担运费")
     front_image = models.ImageField(upload_to="goods/images/", null=True, blank=True, verbose_name="封面图", max_length=200)
-    images = models.TextField('商品图片列表')
+    images = models.CharField('商品图片列表', max_length=1024)
     is_new = models.BooleanField(default=False, verbose_name="是否新品")
     is_hot = models.BooleanField(default=False, verbose_name="是否热销")
-    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = '商品'
         verbose_name_plural = verbose_name
-        ordering = ('-create_time',)  # admin列表页默认初始排序规则
+        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 
-class ShoppingCartModel(models.Model):
+class ShoppingCartModel(metaclass=GenericModelClass):
     """
     购物车
     """
@@ -68,19 +68,19 @@ class ShoppingCartModel(models.Model):
     good = models.ForeignKey(GoodModel, verbose_name="商品", on_delete=models.CASCADE)
     num = models.IntegerField(default=0, verbose_name="购买数量")
 
-    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = '购物车'
         verbose_name_plural = verbose_name
         unique_together = ("owner", "good")
-        ordering = ('-create_time',)  # admin列表页默认初始排序规则
+        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return "%s(%d)".format(self.good.name, self.num)
 
 
-class OrderInfoModel(models.Model):
+class OrderInfoModel(metaclass=GenericModelClass):
     """
     订单
     """
@@ -92,8 +92,8 @@ class OrderInfoModel(models.Model):
         ("paying", "待支付"),
     )
 
-    owner = models.ForeignKey(UserModel, verbose_name="用户", on_delete=models.CASCADE)
     order_sn = models.CharField(max_length=60, null=True, blank=True, unique=True, verbose_name="订单号")  # 平台内的id
+    owner = models.ForeignKey(UserModel, verbose_name="用户", on_delete=models.CASCADE)
     trade_no = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="交易号")  # 支付宝那边的id
     pay_status = models.CharField(choices=ORDER_STATUS, default="paying", max_length=30, verbose_name="订单状态")
     message = models.CharField(max_length=200, verbose_name="订单留言")
@@ -105,18 +105,18 @@ class OrderInfoModel(models.Model):
     receive_name = models.CharField(max_length=20, default="", verbose_name="签收人")
     receive_mobile = models.CharField(max_length=11, verbose_name="联系电话")
 
-    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = "订单"
         verbose_name_plural = verbose_name
-        ordering = ('-create_time',)  # admin列表页默认初始排序规则
+        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
-    def __str__(self):
-        return str(self.order_sn)
+    # def __str__(self):
+    #     return str(self.order_sn)
 
 
-class OrderGoodModel(models.Model):
+class OrderGoodModel(metaclass=GenericModelClass):
     """
     订单的商品详情
     """
@@ -124,12 +124,12 @@ class OrderGoodModel(models.Model):
     good = models.ForeignKey(GoodModel, verbose_name="商品", on_delete=models.CASCADE, db_constraint=False)
     num = models.IntegerField(default=0, verbose_name="商品数量")
 
-    create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
+    # create_time = models.DateTimeField(verbose_name="添加时间", auto_now_add=True)
 
     class Meta:
         verbose_name = "订单商品"
         verbose_name_plural = verbose_name
-        ordering = ('-create_time',)  # admin列表页默认初始排序规则
+        # ordering = ('-create_time',)  # admin列表页默认初始排序规则
 
     def __str__(self):
         return str(self.order.order_sn)

@@ -17,5 +17,5 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         password = instance.password
         instance.set_password(password)
         # 给一个初始昵称
-        instance.nick_name = '用户' + str(random.randint(100000, 999999))
+        instance.name = '用户' + str(random.randint(100000, 999999))
         instance.save()

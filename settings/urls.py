@@ -75,7 +75,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # admin后台配置
 # https://www.liujiangblog.com/course/django/158
-admin.site.empty_value_display = '-空-'  # 字段没有值（例如None，空字符串等等）怎么显示
+admin.site.empty_value_display = '- 空 -'  # 字段没有值（例如None，空字符串等等）怎么显示
 admin.site.site_header = '后台管理登录'  # 页面显示的标题
 admin.site.site_title = '后台管理系统'  # 页面头部标题
 admin.site.index_title = '后台管理系统'
