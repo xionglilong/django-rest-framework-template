@@ -33,6 +33,7 @@ django-mptt-admin = ">=2.2.0" # tree model admin: https://github.com/mbraak/djan
 # djangorestframework-jsonapi = ">=5.0.0"  # json api formatting: https://github.com/django-json-api/django-rest-framework-json-api
 
 [dev-packages]
+# django-debug-toolbar = '*'  # performance check: https://github.com/jazzband/django-debug-toolbar/
 
 [requires]
 python_version = "3.10"

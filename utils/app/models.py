@@ -23,6 +23,7 @@ def get_sentinel_user(sub_objs):
     handover_id = 0  # 交接人ID
     for model in sub_objs:
         handover_id = model.owner.handover_id if hasattr(model, 'owner') else 0
+        break
     if handover_id:  # 如果有交接人
         return handover_id
     else:
